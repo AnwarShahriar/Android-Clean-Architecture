@@ -1,0 +1,2 @@
+include ':app', ':domain', ':data', ':remote', ':local', ':presentation'
+rootProject.name='ACA Template'

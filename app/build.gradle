@@ -1,0 +1,129 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.project.nagad.bazaar"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.appVersionCode
+        versionName rootProject.ext.appVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+
+        debug {
+
+            //buildConfigField "String", "API_VERSION", "0.1.5"
+
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
+
+            //ext.enableCrashlytics = false
+
+            //manifestPlaceholders = [crashlyticsEnabled: false]
+
+        }
+        release {
+
+            //buildConfigField "String", "API_VERSION", "0.1.5"
+
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            //manifestPlaceholders = [crashlyticsEnabled: true]
+
+            //signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation project(':domain')
+    implementation project(':data')
+    implementation project(':remote')
+    implementation project(':local')
+    implementation project(':presentation')
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Dagger dependency injection
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2Version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2Version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit2Version"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+
+    //Rx
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+    // Room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // VM and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
+    implementation "com.google.code.findbugs:jsr305:$jsrVersion"
+
+    // UI
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.cardview:cardview:$cardViewVersion"
+    implementation "androidx.legacy:legacy-support-v4:$legacyVersion"
+    // material repo is always changing
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
+    implementation "androidx.viewpager2:viewpager2:$viewPager2Version"
+    implementation "androidx.recyclerview:recyclerview:$recyclerviewVersion"
+    implementation "com.karumi:dexter:$dexterVersion" //permission
+    implementation "com.github.bumptech.glide:glide:$glideVersion" //image
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "com.jakewharton.timber:timber:$timberVersion" //timber
+
+    //custom views
+    implementation 'com.yalantis:phoenix:1.2.3'
+
+    //firebase and related libs
+    implementation "com.google.firebase:firebase-core:$firebaseCoreVersion"
+    implementation "com.google.firebase:firebase-analytics:$firebaseAnlyticsVersion"
+    implementation "com.crashlytics.sdk.android:crashlytics:$firebaseCrashlyticsVersion"
+
+    // test
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "androidx.test:rules:$testRulesVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+}

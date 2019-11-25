@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- primary palette -->
+    <color name="brand_green">#047BD5</color>
+    <color name="icon_inactive_color">#FFAEB2BB</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="red">#E91E1E</color>
+    <color name="yellow">#FFEB3B</color>
+    <color name="black">#0F0F0F</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="orange">#FF5722</color>
+
+    <color name="default_selected_dot_color">#ffffff</color>
+    <color name="default_dot_color">#e8e8e8</color>
+</resources>
