@@ -51,6 +51,8 @@ dependencies {
     // ReactiveStreams support for LiveData
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycleVersion"
 
+    implementation "com.jakewharton.timber:timber:$timberVersion" //timber
+
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$archCoreVersion"
     testImplementation "org.mockito:mockito-core:$mockitoVersion"

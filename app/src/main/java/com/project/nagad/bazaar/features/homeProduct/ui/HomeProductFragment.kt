@@ -34,9 +34,6 @@ class HomeProductFragment : BaseFragment() {
 
     private lateinit var homeViewModel: HomePageVM
 
-    private lateinit var storiesViewPagerAdapter: StoriesViewPagerAdapter
-    private lateinit var storyItems: List<StoriesBanner>
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,18 +44,6 @@ class HomeProductFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        pullRefresh.setOnRefreshListener {
-//            pullRefresh.postDelayed(
-//                { pullRefresh.setRefreshing(false) }, 1000
-//            )
-//        }
-
-        storyItems = emptyList()
-        viewpagerStories.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        storiesViewPagerAdapter = StoriesViewPagerAdapter(storyItems, requireContext())
-        viewpagerStories.adapter = storiesViewPagerAdapter
-
-
         homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomePageVM::class.java)
     }
 
@@ -68,19 +53,23 @@ class HomeProductFragment : BaseFragment() {
         with(homeViewModel) {
             userInfoResource.observe(viewLifecycleOwner, Observer { resource ->
 
-                println("Observed...")
+                Timber.d("Observed...")
 
                 when (resource.status) {
                     Status.LOADING -> {
-                        println("Loading...")
+                        Timber.d("Loading...")
                     }
                     Status.ERROR -> {
-                        println("Error...")
+                        Timber.e("Error...")
                     }
                     Status.SUCCESS -> {
                         println("Success...")
                         resource.data?.let {
                             Timber.d("Success in ui $it")
+
+                            tvName.text = it.userName
+                            tvEmail.text = it.userEmail
+                            tvAddress.text = it.userAddress
                         }
                     }
                 }
