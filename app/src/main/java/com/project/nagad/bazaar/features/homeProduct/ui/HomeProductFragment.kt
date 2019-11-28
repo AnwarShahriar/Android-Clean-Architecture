@@ -34,6 +34,11 @@ class HomeProductFragment : BaseFragment() {
 
     private lateinit var homeViewModel: HomePageVM
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomePageVM::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,13 +48,14 @@ class HomeProductFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        homeViewModel = ViewModelProviders.of(this, viewModelFactory).get(HomePageVM::class.java)
+        if (homeViewModel.userInfoResource.value == null) {
+            homeViewModel.fetchUserInfo("ASHIF123")
+        }
+        Timber.d(this.toString())
+        registerObservers()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
+    private fun registerObservers() {
         with(homeViewModel) {
             userInfoResource.observe(viewLifecycleOwner, Observer { resource ->
 

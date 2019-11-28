@@ -1,6 +1,8 @@
 package com.project.nagad.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.toLiveData
 import com.project.nagad.domain.entities.AllHomeInfoEntity
 import com.project.nagad.domain.entities.UserInfoEntity
@@ -23,27 +25,34 @@ class HomePageVM @Inject internal constructor(
     private val getAllHomeInfoUseCase: GetAllHomeInfoUseCase
 ) : BaseViewModel() {
 
-    val userInfoResource: LiveData<Resource<UserInfo>>
-        get() = getUserInfoUseCase
-            .buildUseCase(GetUserInfoUseCase.Params("ASHIF123"))
-            .doOnSubscribe {
-                println("calling do on subscribe")
-                addDisposables(it) }
-            .map {
-                println("calling map 1")
-                userInfoDomainMapper.toViewFromDomain(it) }
-            .map {
-                println("calling map 2")
-                Resource.success(it) }
-            .startWith(Resource.loading())
-            .onErrorResumeNext(
-                Function {
-                    println("calling on error resume next fun")
-                    Observable.just(Resource.error(it.localizedMessage))
+    private val userInfoTrigger = MutableLiveData<String>()
+
+    val userInfoResource: LiveData<Resource<UserInfo>> =
+        Transformations.switchMap(userInfoTrigger) {
+            getUserInfoUseCase
+                .buildUseCase(GetUserInfoUseCase.Params(userInfoTrigger.value!!))
+                .doOnSubscribe {
+                    println("calling do on subscribe")
+                    addDisposables(it)
                 }
-            )
-            .toFlowable(BackpressureStrategy.LATEST)
-            .toLiveData()
+                .map {
+                    println("calling map 1")
+                    userInfoDomainMapper.toViewFromDomain(it)
+                }
+                .map {
+                    println("calling map 2")
+                    Resource.success(it)
+                }
+                .startWith(Resource.loading())
+                .onErrorResumeNext(
+                    Function {
+                        println("calling on error resume next fun")
+                        Observable.just(Resource.error(it.localizedMessage))
+                    }
+                )
+                .toFlowable(BackpressureStrategy.LATEST)
+                .toLiveData()
+        }
 
     val allHomeInfoResource: LiveData<Resource<AllHomeInfo>>
         get() = getAllHomeInfoUseCase
@@ -56,4 +65,7 @@ class HomePageVM @Inject internal constructor(
             .toFlowable(BackpressureStrategy.LATEST)
             .toLiveData()
 
+    fun fetchUserInfo(identifier: String) {
+        userInfoTrigger.postValue(identifier)
+    }
 }
